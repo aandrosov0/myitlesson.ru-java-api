@@ -18,7 +18,7 @@ public class ApiError {
 
         NOT_FOUND,
 
-        SERVER;
+        SERVER
     }
 
     private String message;
