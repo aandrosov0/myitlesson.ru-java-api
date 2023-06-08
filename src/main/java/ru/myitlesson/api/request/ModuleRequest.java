@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import retrofit2.Response;
 import ru.myitlesson.api.MyItLessonClient;
 import ru.myitlesson.api.Utils;
-import ru.myitlesson.api.entity.CourseEntity;
 import ru.myitlesson.api.entity.ModuleEntity;
 import ru.myitlesson.api.service.ModuleService;
 
@@ -23,8 +22,8 @@ public class ModuleRequest extends Request<ModuleService> {
         return response.body();
     }
 
-    public int add(ModuleEntity module, CourseEntity course) throws IOException {
-        Response<JsonObject> response = service.add(client.getBasic(), module.getTitle(), module.getContent(), course.getId()).execute();
+    public int add(ModuleEntity module, int courseId) throws IOException {
+        Response<JsonObject> response = service.add(client.getBasic(), module.getTitle(), module.getContent(), courseId).execute();
         client.setError(Utils.parseErrorIfExists(client, response));
 
         if(client.getError() != null) {
@@ -32,14 +31,13 @@ public class ModuleRequest extends Request<ModuleService> {
         }
 
         int id = Objects.requireNonNull(response.body()).get("id").getAsInt();
-        course.getModules().add(id);
-        module.setCourse(course.getId());
+        module.setCourse(courseId);
 
         return id;
     }
 
-    public void delete(ModuleEntity module) throws IOException {
-        Response<JsonObject> response = service.delete(client.getBasic(), module.getId()).execute();
+    public void delete(int id) throws IOException {
+        Response<JsonObject> response = service.delete(client.getBasic(), id).execute();
         client.setError(Utils.parseErrorIfExists(client, response));
     }
 }

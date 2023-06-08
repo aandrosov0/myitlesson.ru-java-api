@@ -8,7 +8,6 @@ import retrofit2.Response;
 import ru.myitlesson.api.MyItLessonClient;
 import ru.myitlesson.api.Utils;
 import ru.myitlesson.api.entity.CourseEntity;
-import ru.myitlesson.api.entity.UserEntity;
 import ru.myitlesson.api.service.CourseService;
 
 import java.io.File;
@@ -36,8 +35,8 @@ public class CourseRequest extends Request<CourseService> {
         return response.body();
     }
 
-    public int add(CourseEntity course, UserEntity user) throws IOException {
-        Response<JsonObject> response = service.add(client.getBasic(), course.getTitle(), course.getDescription(), user.getId()).execute();
+    public int add(CourseEntity course, int authorId) throws IOException {
+        Response<JsonObject> response = service.add(client.getBasic(), course.getTitle(), course.getDescription(), authorId).execute();
         client.setError(Utils.parseErrorIfExists(client, response));
 
         if(client.getError() != null) {
@@ -45,14 +44,13 @@ public class CourseRequest extends Request<CourseService> {
         }
 
         int id = Objects.requireNonNull(response.body()).get("id").getAsInt();
-        user.getAuthoredCourses().add(id);
-        course.setAuthor(user.getId());
+        course.setAuthor(authorId);
 
         return id;
     }
 
-    public void delete(CourseEntity course) throws IOException {
-        Response<JsonObject> response = service.delete(client.getBasic(), course.getId()).execute();
+    public void delete(int id) throws IOException {
+        Response<JsonObject> response = service.delete(client.getBasic(), id).execute();
         client.setError(Utils.parseErrorIfExists(client, response));
     }
 
