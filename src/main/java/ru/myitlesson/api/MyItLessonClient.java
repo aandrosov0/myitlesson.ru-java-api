@@ -27,6 +27,8 @@ public class MyItLessonClient {
 
     private final String token;
 
+    private final long userId;
+
     public MyItLessonClient(String username, String password) throws IOException {
         retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)
@@ -39,11 +41,13 @@ public class MyItLessonClient {
         error = Utils.parseErrorIfExists(this, response);
 
         if(error != null || response.body() == null) {
-            token = "";
+            token = null;
+            userId = -1;
             return;
         }
 
         token = response.body().get("token").getAsString();
+        userId = response.body().get("id").getAsLong();
     }
 
     public UserRequest user() {
@@ -68,6 +72,10 @@ public class MyItLessonClient {
 
     public String getBasic() {
         return "Basic " + token;
+    }
+
+    public long getUserId() {
+        return userId;
     }
 
     public <T> Converter<ResponseBody, T> getResponseBodyConverter(Type type) {
