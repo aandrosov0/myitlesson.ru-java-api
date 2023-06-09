@@ -8,10 +8,10 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ru.myitlesson.api.request.CourseRequest;
+import ru.myitlesson.api.request.LessonRequest;
+import ru.myitlesson.api.request.ModuleRequest;
 import ru.myitlesson.api.request.UserRequest;
-import ru.myitlesson.api.service.AuthService;
-import ru.myitlesson.api.service.CourseService;
-import ru.myitlesson.api.service.UserService;
+import ru.myitlesson.api.service.*;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -56,6 +56,14 @@ public class MyItLessonClient {
 
     public CourseRequest course() {
         return new CourseRequest(this, retrofit.create(CourseService.class));
+    }
+
+    public ModuleRequest module() {
+        return new ModuleRequest(this, retrofit.create(ModuleService.class));
+    }
+
+    public LessonRequest lesson() {
+        return new LessonRequest(this, retrofit.create(LessonService.class));
     }
 
     public ApiError getError() {
