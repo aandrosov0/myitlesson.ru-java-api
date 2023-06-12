@@ -19,7 +19,7 @@ import java.lang.reflect.Type;
 
 public class MyItLessonClient {
 
-    public static final String API_URL = "http://192.168.1.33:8000/api/";
+    public static final String API_URL = "https://myitlesson.ru/api/";
 
     private final Retrofit retrofit;
 
